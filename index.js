@@ -14,7 +14,8 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const channelName = 'perkenalan';
 const guildName = 'KMK ITB';
-const unassignedRole = 'KMK XX';
+const unassignedRoleName = 'KMK XX';
+const assignedRoleName = 'Member';
 
 const config = {
   clientID: process.env.KMK_BOT_CLIENT_ID,
@@ -28,19 +29,6 @@ client.on('ready', () => {
 
 // Ini buat auto-assign role berdasarkan angkatan dan jabatan
 client.on('message', msg => {
-    /*
-     * Contoh `field` user
-     User {
-      id: '290432866284732417',
-      username: 'Marrrcy',
-      bot: false,
-      discriminator: '1563',
-      avatar: '16c1c4083d29b2d534537caac6217ab0',
-      lastMessageID: '754283360414728244',
-      lastMessageChannelID: '754280569214599179',
-      flags: UserFlags { bitfield: 0 }
-    } */
-
   // Kalo message dikirim di guildName dan channel channelName
   if (msg.channel.name === channelName && msg.guild.name === guildName) {
     console.log(`Dapat message dari ${msg.author.id}`);
@@ -59,6 +47,7 @@ client.on('message', msg => {
       angkatan = cari(parsedContent, 'angkatan');
     } catch(e) {
       sender.send('Format perkenalan Anda salah, tolong diperbaiki')
+      msg.delete();
       return;
     }
 
@@ -68,17 +57,18 @@ client.on('message', msg => {
         angkatan = 'Alumni';
       } else {
         sender.send('Format Anda salah. Harap memasukkan tahun angkatan atau \'alumni\' (tanpa \') jika angkatan 2015 atau sebelumnya');
+        msg.delete();
         return;
       }
     } else {
       angkatan = angkatanAngka;
     }
 
-    // Kalo orang yg ngirim message member dari server guildName
+    // Kalo orang yg ngirim msg member dari server guildName
     if (member) {
       let roleAssigned = false;
       const gaPunyaRole = member.roles.cache.find((e) => {
-        return e.name === unassignedRole;
+        return e.name === unassignedRoleName;
       });
 
       if (gaPunyaRole) {
@@ -92,17 +82,41 @@ client.on('message', msg => {
           roleAssigned = true;
           // Ilangin role dari member
           member.roles.remove(gaPunyaRole);
-
         }
 
         // Ngeset nickname sesuai nama lengkap
         if (roleAssigned) {
           member.setNickname(namaLengkap);
+          member.roles.add(msgGuild.roles.cache.find((e) => {
+            return e.name === assignedRoleName;
+          }));
         }
       }
     }
   }
 });
 
+// Buat autoassign role ketika join
+client.on('guildMemberAdd', (member) => {
+  member.roles.add(member.guild.roles.cache.find((e) => {
+    return e.name === 'KMK XX';
+  }));
+
+  member.send('Selamat datang di server Discord KMK ITB!\n\
+  Silakan perkenalan ke server discord dengan format: \n\
+              > - Nama lengkap:\n\
+              > - Nama panggilan:\n\
+              > - Fakultas/Jurusan:\n\
+              > - Angkatan:\n\
+              > - Divisi:\n\
+              > * Bagian divisi hanya diisi jika menjadi staff/BP\n\n\
+  Contoh:\n\
+              > - Nama lengkap: Bot KMK\n\
+              > - Nama panggilan: Bot\n\
+              > - Fakultas/Jurusan: STEI/Teknik Informatika\n\
+              > - Angkatan: 2020\n\
+              > - Divisi: BRT\n\n\
+  Ditunggu ngeramein dan asik-asikan di Discord KMK ITB!');
+});
 
 client.login(config.clientToken);
