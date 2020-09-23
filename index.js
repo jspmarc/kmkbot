@@ -4,11 +4,11 @@
 
 const cari = (str, dicari) => {
   const tempStr = str
-  .find((e) => {
-  return e.toLowerCase().includes(dicari)
-  }).split(':')
+    .find((e) => {
+      return e.toLowerCase().includes(dicari)
+    }).split(':');
 
-  return tempStr[tempStr.length-1].trim();
+  return tempStr[tempStr.length - 1].trim();
 }
 const Discord = require('discord.js');
 const client = new Discord.Client();
@@ -36,22 +36,24 @@ client.on('message', msg => {
     const sender = msg.author;
     const msgGuild = msg.guild;
     const member = msgGuild.member(sender);
+    let parsedContent;
 
-    let namaLengkap = ""
-    let BP = ""
-    let angkatan = ""
+    let namaLengkap = "";
+    //let BP = "";
+    let angkatan = "";
     try {
       parsedContent = content.split('\n');
-      namaLengkap = cari(parsedContent, 'nama lengkap')
-      BP = cari(parsedContent, 'divisi');
+      namaLengkap = cari(parsedContent, 'nama lengkap');
+      //BP = cari(parsedContent, 'divisi');
       angkatan = cari(parsedContent, 'angkatan');
-    } catch(e) {
-      sender.send('Format perkenalan Anda salah, tolong diperbaiki')
+    } catch (e) {
+      sender.send('Format perkenalan Anda salah, tolong diperbaiki');
+      console.log(e);
       msg.delete();
       return;
     }
 
-    const angkatanAngka = parseInt(angkatan.substring(angkatan.length-2, angkatan.length));
+    const angkatanAngka = parseInt(angkatan.substring(angkatan.length - 2, angkatan.length));
     if (isNaN(angkatanAngka)) {
       if (angkatan.toLowerCase().includes('alumni')) {
         angkatan = 'Alumni';
