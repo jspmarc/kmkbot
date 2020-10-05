@@ -1,34 +1,12 @@
 'use strict';
 
 const cari = (str, dicari) => {
-  let tempStr = str
+  const tempStr = str
     .find((e) => {
       return e.toLowerCase().includes(dicari)
     }).split(':')
 
-  tempStr = tempStr[tempStr.length - 1].trim();
-
-  let i = 0;
-  if (tempStr.length > 32) {
-    const strArr = tempStr.split(' ');
-    tempStr = '';
-    while (tempStr.length <= 32 && i < strArr.length) {
-      const initial = strArr[i].slice(0, 1).toUpperCase()
-        + strArr.length == i + 1 ? '.' : '. ';
-
-      // TODO: Kalo dia kata terakhir, ga usah itung spasinya
-      if ((tempStr + strArr[i] + '. ').length > 32
-        && (tempStr + initial).length <= 32) {
-        tempStr += initial;
-      } else if ((tempStr + strArr[i] + ' ').length <= 32) {
-        tempStr += strArr[i] + ' ';
-      }
-
-      ++i;
-    }
-  }
-
-  return tempStr;
+  return tempStr[tempStr.length - 1].trim();
 }
 
 const Discord = require('discord.js');
@@ -66,7 +44,11 @@ client.on('message', msg => {
       namaLengkap = cari(parsedContent, 'nama lengkap')
       BP = cari(parsedContent, 'divisi');
       angkatan = cari(parsedContent, 'angkatan');
+<<<<<<< HEAD
     } catch (e) {
+=======
+    } catch(e) {
+>>>>>>> parent of 8e4c640... Remove dependency for finding division
       sender.send('Format perkenalan Anda salah, tolong diperbaiki')
       msg.delete();
       return;
