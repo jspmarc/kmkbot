@@ -1,15 +1,36 @@
-// TODO
-// Buat BP
-// Nickname
+'use strict';
 
 const cari = (str, dicari) => {
-  const tempStr = str
+  let tempStr = str
     .find((e) => {
       return e.toLowerCase().includes(dicari)
     }).split(':');
 
-  return tempStr[tempStr.length - 1].trim();
+  tempStr = tempStr[tempStr.length - 1].trim();
+
+  let i = 0;
+  if (tempStr.length > 32) {
+    const strArr = tempStr.split(' ');
+    tempStr = '';
+    while (tempStr.length <= 32 && i < strArr.length) {
+      const initial = strArr[i].slice(0, 1).toUpperCase()
+        + strArr.length == i + 1 ? '.' : '. ';
+
+      // TODO: Kalo dia kata terakhir, ga usah itung spasinya
+      if ((tempStr + strArr[i] + '. ').length > 32
+        && (tempStr + initial).length <= 32) {
+        tempStr += initial;
+      } else if ((tempStr + strArr[i] + ' ').length <= 32) {
+        tempStr += strArr[i] + ' ';
+      }
+
+      ++i;
+    }
+  }
+
+  return tempStr;
 }
+
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const channelName = 'perkenalan';
@@ -21,7 +42,7 @@ const config = {
   clientID: process.env.KMK_BOT_CLIENT_ID,
   clientSecret: process.env.KMK_BOT_SECRET,
   clientToken: process.env.KMK_BOT_TOKEN
-}
+};
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
