@@ -44,15 +44,7 @@ client.on('message', msg => {
       namaLengkap = cari(parsedContent, 'nama lengkap')
       BP = cari(parsedContent, 'divisi');
       angkatan = cari(parsedContent, 'angkatan');
-<<<<<<< HEAD
-<<<<<<< HEAD
     } catch (e) {
-=======
-    } catch(e) {
->>>>>>> parent of 8e4c640... Remove dependency for finding division
-=======
-    } catch(e) {
->>>>>>> parent of 8e4c640... Remove dependency for finding division
       sender.send('Format perkenalan Anda salah, tolong diperbaiki')
       msg.delete();
       return;
