@@ -28,15 +28,21 @@ client.on('ready', () => {
 });
 
 const splitName = name => {
+  const maxLength = 32;
   let thatName = name.split(' ');
   let currentLength = name.length;
   let i = thatName.length-1;
-  while (currentLength > 32 && thatName.length > 1){
+  while (currentLength > maxLength && i > 0){
     currentLength -= thatName[i].length - 2;
     thatName[i] = thatName[i].slice(0, 1).toUpperCase() + '.';
     i--;
   }
-  return thatName.join(' ');
+  thatName = thatName.join(' ');
+  if(currentLength > maxLength){
+    thatName = thatName.slice(0, maxLength-3)+'...';
+  }
+
+  return thatName;
 }
 
 // Ini buat auto-assign role berdasarkan angkatan dan jabatan
