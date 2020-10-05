@@ -45,7 +45,11 @@ client.on('message', msg => {
       BP = cari(parsedContent, 'divisi');
       angkatan = cari(parsedContent, 'angkatan');
 <<<<<<< HEAD
+<<<<<<< HEAD
     } catch (e) {
+=======
+    } catch(e) {
+>>>>>>> parent of 8e4c640... Remove dependency for finding division
 =======
     } catch(e) {
 >>>>>>> parent of 8e4c640... Remove dependency for finding division
