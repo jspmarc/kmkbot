@@ -6,28 +6,6 @@ const cari = (str, dicari) => {
       return e.toLowerCase().includes(dicari)
     }).split(':')
 
-  tempStr = tempStr[tempStr.length - 1].trim();
-
-  if (tempStr.length > 32) {
-    const strArr = tempStr.split(' ');
-    let i = 0;
-    tempStr = '';
-    while (tempStr.length <= 32 && i < strArr.length) {
-      let initial = strArr[i].slice(0, 1).toUpperCase();
-      initial += strArr.length == i + 1 ? '.' : '. ';
-      console.log(initial);
-
-      // TODO: Kalo dia kata terakhir, ga usah itung spasinya
-      if ((tempStr + strArr[i] + '. ').length > 32
-        && (tempStr + initial).length <= 32) {
-        tempStr += initial;
-      } else if ((tempStr + strArr[i] + ' ').length <= 32) {
-        tempStr += strArr[i] + ' ';
-      }
-
-      ++i;
-    }
-  }
 
   return tempStr;
 }
@@ -49,6 +27,24 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
+const splitName = name => {
+  const maxLength = 32;
+  let thatName = name.split(' ');
+  let currentLength = name.length;
+  let i = thatName.length-1;
+  while (currentLength > maxLength && i > 0){
+    currentLength -= thatName[i].length - 2;
+    thatName[i] = thatName[i].slice(0, 1).toUpperCase() + '.';
+    i--;
+  }
+  thatName = thatName.join(' ');
+  if(currentLength > maxLength){
+    thatName = thatName.slice(0, maxLength-3)+'...';
+  }
+
+  return thatName;
+}
+
 // Ini buat auto-assign role berdasarkan angkatan dan jabatan
 client.on('message', msg => {
   // Kalo message dikirim di guildName dan channel channelName
@@ -64,7 +60,8 @@ client.on('message', msg => {
     let angkatan = "";
     try {
       parsedContent = content.split('\n');
-      namaLengkap = cari(parsedContent, 'nama lengkap')
+      namaLengkap = splitName(cari(parsedContent, 'nama lengkap'));
+      
       BP = cari(parsedContent, 'divisi');
       angkatan = cari(parsedContent, 'angkatan');
     } catch (e) {
