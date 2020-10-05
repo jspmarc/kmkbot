@@ -8,13 +8,14 @@ const cari = (str, dicari) => {
 
   tempStr = tempStr[tempStr.length - 1].trim();
 
-  let i = 0;
   if (tempStr.length > 32) {
     const strArr = tempStr.split(' ');
+    let i = 0;
     tempStr = '';
     while (tempStr.length <= 32 && i < strArr.length) {
-      const initial = strArr[i].slice(0, 1).toUpperCase()
-        + strArr.length == i + 1 ? '.' : '. ';
+      let initial = strArr[i].slice(0, 1).toUpperCase();
+      initial += strArr.length == i + 1 ? '.' : '. ';
+      console.log(initial);
 
       // TODO: Kalo dia kata terakhir, ga usah itung spasinya
       if ((tempStr + strArr[i] + '. ').length > 32
