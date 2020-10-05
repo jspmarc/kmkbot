@@ -6,7 +6,30 @@ const cari = (str, dicari) => {
       return e.toLowerCase().includes(dicari)
     }).split(':')
 
-  return tempStr[tempStr.length - 1].trim();
+  tempStr = tempStr[tempStr.length - 1].trim();
+
+  if (tempStr.length > 32) {
+    const strArr = tempStr.split(' ');
+    let i = 0;
+    tempStr = '';
+    while (tempStr.length <= 32 && i < strArr.length) {
+      let initial = strArr[i].slice(0, 1).toUpperCase();
+      initial += strArr.length == i + 1 ? '.' : '. ';
+      console.log(initial);
+
+      // TODO: Kalo dia kata terakhir, ga usah itung spasinya
+      if ((tempStr + strArr[i] + '. ').length > 32
+        && (tempStr + initial).length <= 32) {
+        tempStr += initial;
+      } else if ((tempStr + strArr[i] + ' ').length <= 32) {
+        tempStr += strArr[i] + ' ';
+      }
+
+      ++i;
+    }
+  }
+
+  return tempStr;
 }
 
 const Discord = require('discord.js');
@@ -36,9 +59,9 @@ client.on('message', msg => {
     const msgGuild = msg.guild;
     const member = msgGuild.member(sender);
 
-    let namaLengkap = ""
-    let BP = ""
-    let angkatan = ""
+    let namaLengkap = "";
+    //let BP = "";
+    let angkatan = "";
     try {
       parsedContent = content.split('\n');
       namaLengkap = cari(parsedContent, 'nama lengkap')
