@@ -4,10 +4,27 @@ const cari = (str, dicari) => {
   const tempStr = str
     .find((e) => {
       return e.toLowerCase().includes(dicari)
-    }).split(':')
-
+    }).split(':')[1].trim();
 
   return tempStr;
+}
+
+const splitName = (name) => {
+  const maxLength = 32;
+  let thatName = name.split(' ');
+  let currentLength = name.length;
+  let i = thatName.length - 1;
+  while (currentLength > maxLength && i > 0) {
+    currentLength -= thatName[i].length - 2;
+    thatName[i] = thatName[i].slice(0, 1).toUpperCase() + '.';
+    i--;
+  }
+  thatName = thatName.join(' ');
+  if (currentLength > maxLength) {
+    thatName = thatName.slice(0, maxLength - 3) + '...';
+  }
+
+  return thatName;
 }
 
 const Discord = require('discord.js');
@@ -27,24 +44,6 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
-const splitName = name => {
-  const maxLength = 32;
-  let thatName = name.split(' ');
-  let currentLength = name.length;
-  let i = thatName.length-1;
-  while (currentLength > maxLength && i > 0){
-    currentLength -= thatName[i].length - 2;
-    thatName[i] = thatName[i].slice(0, 1).toUpperCase() + '.';
-    i--;
-  }
-  thatName = thatName.join(' ');
-  if(currentLength > maxLength){
-    thatName = thatName.slice(0, maxLength-3)+'...';
-  }
-
-  return thatName;
-}
-
 // Ini buat auto-assign role berdasarkan angkatan dan jabatan
 client.on('message', msg => {
   // Kalo message dikirim di guildName dan channel channelName
@@ -56,16 +55,15 @@ client.on('message', msg => {
     const member = msgGuild.member(sender);
 
     let namaLengkap = "";
-    //let BP = "";
     let angkatan = "";
+    let parsedContent = "";
     try {
       parsedContent = content.split('\n');
       namaLengkap = splitName(cari(parsedContent, 'nama lengkap'));
-      
-      BP = cari(parsedContent, 'divisi');
       angkatan = cari(parsedContent, 'angkatan');
     } catch (e) {
       sender.send('Format perkenalan Anda salah, tolong diperbaiki')
+      console.log(e);
       msg.delete();
       return;
     }
@@ -105,6 +103,7 @@ client.on('message', msg => {
 
         // Ngeset nickname sesuai nama lengkap
         if (roleAssigned) {
+          console.log(namaLengkap);
           member.setNickname(namaLengkap);
           member.roles.add(msgGuild.roles.cache.find((e) => {
             return e.name === assignedRoleName;
