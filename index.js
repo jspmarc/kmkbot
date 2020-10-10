@@ -29,7 +29,7 @@ const splitName = (name) => {
 
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const channelName = 'perkenalan';
+const channelName = '👋perkenalan';
 const guildName = 'KMK ITB';
 const unassignedRoleName = 'KMK XX';
 const assignedRoleName = 'Member';
