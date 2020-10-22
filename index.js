@@ -1,13 +1,17 @@
 'use strict';
 
+const Discord = require('discord.js');
+
 const cari = (str, dicari) => {
   const tempStr = str
     .find((e) => {
-      return e.toLowerCase().includes(dicari)
-    }).split(':')[1].trim();
+      return e.toLowerCase().includes(dicari);
+    })
+    .split(':')[1]
+    .trim();
 
   return tempStr;
-}
+};
 
 const splitName = (name) => {
   const maxLength = 32;
@@ -25,9 +29,8 @@ const splitName = (name) => {
   }
 
   return thatName;
-}
+};
 
-const Discord = require('discord.js');
 const client = new Discord.Client();
 const channelName = '👋perkenalan';
 const guildName = 'KMK ITB';
@@ -37,7 +40,7 @@ const assignedRoleName = 'Member';
 const config = {
   clientID: process.env.KMK_BOT_CLIENT_ID,
   clientSecret: process.env.KMK_BOT_SECRET,
-  clientToken: process.env.KMK_BOT_TOKEN
+  clientToken: process.env.KMK_BOT_TOKEN,
 };
 
 client.on('ready', () => {
@@ -45,7 +48,7 @@ client.on('ready', () => {
 });
 
 // Ini buat auto-assign role berdasarkan angkatan dan jabatan
-client.on('message', msg => {
+client.on('message', (msg) => {
   // Kalo message dikirim di guildName dan channel channelName
   if (msg.channel.name === channelName && msg.guild.name === guildName) {
     console.log(`Dapat message dari ${msg.author.id}`);
@@ -54,26 +57,30 @@ client.on('message', msg => {
     const msgGuild = msg.guild;
     const member = msgGuild.member(sender);
 
-    let namaLengkap = "";
-    let angkatan = "";
-    let parsedContent = "";
+    let namaLengkap = '';
+    let angkatan = '';
+    let parsedContent = '';
     try {
       parsedContent = content.split('\n');
       namaLengkap = splitName(cari(parsedContent, 'nama lengkap'));
       angkatan = cari(parsedContent, 'angkatan');
     } catch (e) {
-      sender.send('Format perkenalan Anda salah, tolong diperbaiki')
+      sender.send('Format perkenalan Anda salah, tolong diperbaiki');
       console.log(e);
       msg.delete();
       return;
     }
 
-    const angkatanAngka = parseInt(angkatan.substring(angkatan.length - 2, angkatan.length));
+    const angkatanAngka = parseInt(
+      angkatan.substring(angkatan.length - 2, angkatan.length)
+    );
     if (isNaN(angkatanAngka)) {
       if (angkatan.toLowerCase().includes('alumni')) {
         angkatan = 'Alumni';
       } else {
-        sender.send('Format Anda salah. Harap memasukkan tahun angkatan atau \'alumni\' (tanpa \') jika angkatan 2015 atau sebelumnya');
+        sender.send(
+          "Format Anda salah. Harap memasukkan tahun angkatan atau 'alumni' (tanpa ') jika angkatan 2015 atau sebelumnya"
+        );
         msg.delete();
         return;
       }
@@ -105,9 +112,11 @@ client.on('message', msg => {
         if (roleAssigned) {
           console.log(namaLengkap);
           member.setNickname(namaLengkap);
-          member.roles.add(msgGuild.roles.cache.find((e) => {
-            return e.name === assignedRoleName;
-          }));
+          member.roles.add(
+            msgGuild.roles.cache.find((e) => {
+              return e.name === assignedRoleName;
+            })
+          );
         }
       }
     }
@@ -116,11 +125,14 @@ client.on('message', msg => {
 
 // Buat autoassign role ketika join
 client.on('guildMemberAdd', (member) => {
-  member.roles.add(member.guild.roles.cache.find((e) => {
-    return e.name === 'KMK XX';
-  }));
+  member.roles.add(
+    member.guild.roles.cache.find((e) => {
+      return e.name === 'KMK XX';
+    })
+  );
 
-  member.send('Selamat datang di server Discord KMK ITB!\n\
+  member.send(
+    'Selamat datang di server Discord KMK ITB!\n\
   Silakan perkenalan ke server discord dengan format: \n\
               > - Nama lengkap:\n\
               > - Nama panggilan:\n\
@@ -134,7 +146,8 @@ client.on('guildMemberAdd', (member) => {
               > - Fakultas/Jurusan: STEI/Teknik Informatika\n\
               > - Angkatan: 2020\n\
               > - Divisi: BRT\n\n\
-  Ditunggu ngeramein dan asik-asikan di Discord KMK ITB!');
+  Ditunggu ngeramein dan asik-asikan di Discord KMK ITB!'
+  );
 });
 
 client.login(config.clientToken);
