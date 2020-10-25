@@ -66,6 +66,9 @@ client.on('message', (msg) => {
       angkatan = cari(parsedContent, 'angkatan');
     } catch (e) {
       sender.send('Format perkenalan Anda salah, tolong diperbaiki');
+      console.log('Message yang diberikan: ');
+      console.log(msg);
+      console.log('Error yang didapat: ');
       console.log(e);
       msg.delete();
       return;
