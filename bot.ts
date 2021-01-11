@@ -20,7 +20,8 @@ const splitName = (name: string) => {
   let i: number = thatNameArr.length - 1;
   while (currentLength > maxLength && i > 0) {
     currentLength -= thatNameArr[i].length - 2;
-    thatNameArr[i--] = thatNameArr[i].slice(0, 1).toUpperCase() + '.';
+    thatNameArr[i] = thatNameArr[i].slice(0, 1).toUpperCase() + '.';
+    i--;
   }
   let thatName: string = thatNameArr.join(' ');
   if (currentLength > maxLength) {

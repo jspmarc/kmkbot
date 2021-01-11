@@ -17,7 +17,8 @@ var splitName = function (name) {
     var i = thatNameArr.length - 1;
     while (currentLength > maxLength && i > 0) {
         currentLength -= thatNameArr[i].length - 2;
-        thatNameArr[i--] = thatNameArr[i].slice(0, 1).toUpperCase() + '.';
+        thatNameArr[i] = thatNameArr[i].slice(0, 1).toUpperCase() + '.';
+        i--;
     }
     var thatName = thatNameArr.join(' ');
     if (currentLength > maxLength) {
