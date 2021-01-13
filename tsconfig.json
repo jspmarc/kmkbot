@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+        "target": "ES2020",
+        "moduleResolution": "Node",
+        "module": "CommonJS"
+    },
+    "files": ["./src/bot.ts", "./src/modules/events.ts", "./src/modules/commands.ts"]
+}

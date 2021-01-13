@@ -1,7 +1,7 @@
 'use strict';
 
 import * as Discord from 'discord.js';
-import * as command from './commands';
+import * as command from './modules/commands';
 
 /* *** Function declarations *** */
 /* START */
@@ -203,7 +203,7 @@ client.on('message', (msg: Discord.Message) => {
     const usrCmd: string = usrMsg[0];
     const usrCmdArgs: string[] = usrMsg.slice(1);
 
-    command.processCommand(client, msg, usrCmd, usrCmdArgs);
+    command.processCommand(msg, usrCmd, usrCmdArgs);
   }
 });
 
