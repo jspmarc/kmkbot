@@ -1,6 +1,9 @@
 'use strict';
 exports.__esModule = true;
 var Discord = require("discord.js");
+var command = require("./commands");
+/* *** Function declarations *** */
+/* START */
 var cari = function (str, dicari) {
     var tempStr = str
         .find(function (e) {
@@ -26,29 +29,32 @@ var splitName = function (name) {
     }
     return thatName;
 };
+/* END */
+/* *** Config declarations *** */
+/* START */
 var client = new Discord.Client();
 var channelIdPerkenalan = '751093758363304087'; // real channel
 //const channelIdPerkenalan: string = '789181644166135808'; // testing channel
 var guildName = 'KMK ITB';
 var unassignedRoleName = 'KMK XX';
 var assignedRoleName = 'Member';
+var commandPrefix = '!';
 var config = {
     clientID: process.env.KMK_BOT_CLIENT_ID,
     clientSecret: process.env.KMK_BOT_SECRET,
-    clientToken: process.env.KMK_BOT_TOKEN
+    clientToken: process.env.KMK_BOT_TOKEN,
+    guildID: process.env.KMK_GUILD_ID
 };
-client.on('ready', function () {
-    console.log("Logged in as " + client.user.tag + "!");
-});
+/* END */
 /**
  * Ini buat auto-assign role berdasarkan angkatan dan jabatan
  * *** START ***
  */
 client.on('message', function (msg) {
     // Kalo message dikirim di guildName dan channel channelIdPerkenalan
-    console.log('================================================');
     if (msg.channel.id == channelIdPerkenalan && msg.guild.name == guildName) {
-        console.log("Dapat message dari " + msg.author.username + " (" + msg.author.id + ")");
+        console.log("Dapat message dari " + msg.author.username + " (" + msg.author.id + ") di " + msg.channel.id);
+        console.log('================================================');
         var content = msg.content;
         var sender = msg.author;
         var msgGuild = msg.guild;
@@ -68,6 +74,7 @@ client.on('message', function (msg) {
             console.log('Error yang didapat: ');
             console.log(e);
             msg["delete"]();
+            console.log('Pesan sudah dihapus.');
             return;
         }
         var angkatanAngka = parseInt(angkatan_1.substring(angkatan_1.length - 2, angkatan_1.length));
@@ -76,8 +83,9 @@ client.on('message', function (msg) {
                 angkatan_1 = 'Alumni';
             }
             else {
-                sender.send("Format Anda salah. Harap memasukkan tahun angkatan atau 'alumni' (tanpa ') jika angkatan 2015 atau sebelumnya");
+                sender.send("Format Anda salah. Harap memasukkan tahun angkatan atau 'alumni' (tanpa ') jika Anda merupakan alumni KMK angkatan 2015 atau sebelumnya.");
                 msg["delete"]();
+                console.log('Pesan sudah dihapus.');
                 return;
             }
         }
@@ -113,8 +121,8 @@ client.on('message', function (msg) {
                 console.log(msg.author.username + " (" + msg.author.id + ") sudah punya role.");
             }
         }
+        console.log('================================================');
     }
-    console.log('================================================');
 });
 // *** END ***
 /**
@@ -142,4 +150,24 @@ client.on('guildMemberAdd', function (member) {
   Ditunggu ngeramein dan asik-asikan di Discord KMK ITB!');
 });
 // *** END ***
+client.on('message', function (msg) {
+    if (msg.guild == null && msg.author.id != config.clientID) {
+        console.log("Dapat message dari " + msg.author.username + " (" + msg.author.id + ") di DM.");
+        msg.author.send('Terima kasih sudah menghubungi bot KMK ITB. Jika anda memiliki pertanyaan atau saran mengenai bot ini dan/atau server Discord KMK ITB, mohon hubungi admin dengan Line ID: otong1403.');
+    }
+});
+client.on('message', function (msg) {
+    if (msg.guild != null &&
+        msg.author.id != config.clientID &&
+        msg.content.startsWith(commandPrefix, 0)) {
+        console.log("Dapat message dari " + msg.author.username + " (" + msg.author.id + ") di " + msg.guild.name + " channel " + msg.channel.id + ".");
+        var usrMsg = msg.content.slice(1).split(' ');
+        var usrCmd = usrMsg[0];
+        var usrCmdArgs = usrMsg.slice(1);
+        command.processCommand(client, msg, usrCmd, usrCmdArgs);
+    }
+});
+client.on('ready', function () {
+    console.log("Logged in as " + client.user.tag + "!");
+});
 client.login(config.clientToken);

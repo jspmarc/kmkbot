@@ -1,7 +1,10 @@
 'use strict';
 
 import * as Discord from 'discord.js';
+import * as command from './commands';
 
+/* *** Function declarations *** */
+/* START */
 const cari = (str: string[], dicari: string): string => {
   const tempStr = str
     .find((e) => {
@@ -30,23 +33,25 @@ const splitName = (name: string) => {
 
   return thatName;
 };
+/* END */
 
+/* *** Config declarations *** */
+/* START */
 const client: Discord.Client = new Discord.Client();
 const channelIdPerkenalan: string = '751093758363304087'; // real channel
 //const channelIdPerkenalan: string = '789181644166135808'; // testing channel
 const guildName: string = 'KMK ITB';
 const unassignedRoleName: string = 'KMK XX';
 const assignedRoleName: string = 'Member';
+const commandPrefix: string = '!';
 
 const config = {
   clientID: process.env.KMK_BOT_CLIENT_ID,
   clientSecret: process.env.KMK_BOT_SECRET,
   clientToken: process.env.KMK_BOT_TOKEN,
+  guildID: process.env.KMK_GUILD_ID,
 };
-
-client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
-});
+/* END */
 
 /**
  * Ini buat auto-assign role berdasarkan angkatan dan jabatan
@@ -54,9 +59,11 @@ client.on('ready', () => {
  */
 client.on('message', (msg: Discord.Message) => {
   // Kalo message dikirim di guildName dan channel channelIdPerkenalan
-  console.log('================================================');
   if (msg.channel.id == channelIdPerkenalan && msg.guild.name == guildName) {
-    console.log(`Dapat message dari ${msg.author.username} (${msg.author.id})`);
+    console.log(
+      `Dapat message dari ${msg.author.username} (${msg.author.id}) di ${msg.channel.id}`
+    );
+    console.log('================================================');
     const content: string = msg.content;
     const sender: Discord.User = msg.author;
     const msgGuild: Discord.Guild = msg.guild;
@@ -78,6 +85,7 @@ client.on('message', (msg: Discord.Message) => {
       console.log('Error yang didapat: ');
       console.log(e);
       msg.delete();
+      console.log('Pesan sudah dihapus.');
       return;
     }
 
@@ -89,9 +97,10 @@ client.on('message', (msg: Discord.Message) => {
         angkatan = 'Alumni';
       } else {
         sender.send(
-          "Format Anda salah. Harap memasukkan tahun angkatan atau 'alumni' (tanpa ') jika angkatan 2015 atau sebelumnya"
+          "Format Anda salah. Harap memasukkan tahun angkatan atau 'alumni' (tanpa ') jika Anda merupakan alumni KMK angkatan 2015 atau sebelumnya."
         );
         msg.delete();
+        console.log('Pesan sudah dihapus.');
         return;
       }
     } else {
@@ -133,8 +142,8 @@ client.on('message', (msg: Discord.Message) => {
         );
       }
     }
+    console.log('================================================');
   }
-  console.log('================================================');
 });
 
 // *** END ***
@@ -169,5 +178,37 @@ client.on('guildMemberAdd', (member) => {
   );
 });
 // *** END ***
+
+client.on('message', (msg: Discord.Message) => {
+  if (msg.guild == null && msg.author.id != config.clientID) {
+    console.log(
+      `Dapat message dari ${msg.author.username} (${msg.author.id}) di DM.`
+    );
+    msg.author.send(
+      'Terima kasih sudah menghubungi bot KMK ITB. Jika anda memiliki pertanyaan atau saran mengenai bot ini dan/atau server Discord KMK ITB, mohon hubungi admin dengan Line ID: otong1403.'
+    );
+  }
+});
+
+client.on('message', (msg: Discord.Message) => {
+  if (
+    msg.guild != null &&
+    msg.author.id != config.clientID &&
+    msg.content.startsWith(commandPrefix, 0)
+  ) {
+    console.log(
+      `Dapat message dari ${msg.author.username} (${msg.author.id}) di ${msg.guild.name} channel ${msg.channel.id}.`
+    );
+    const usrMsg: string[] = msg.content.slice(1).split(' ');
+    const usrCmd: string = usrMsg[0];
+    const usrCmdArgs: string[] = usrMsg.slice(1);
+
+    command.processCommand(client, msg, usrCmd, usrCmdArgs);
+  }
+});
+
+client.on('ready', () => {
+  console.log(`Logged in as ${client.user.tag}!`);
+});
 
 client.login(config.clientToken);
