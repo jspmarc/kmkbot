@@ -2,6 +2,8 @@ import * as Discord from 'discord.js';
 import * as fs from 'fs';
 import { Event } from './events';
 
+export const commandPrefix: string = '~';
+
 /* an object with similar key and values as the events.json file */
 interface rawEvent {
   title: string;
@@ -118,7 +120,7 @@ export const processCommand = (
     msg.channel.send(sendStr);
   } else {
     msg.channel.send(
-      'Perintah tidak dikenali. Gunakan `!help` atau `!tolong`.'
+      `Perintah tidak dikenali. Gunakan \`${commandPrefix}help\` atau \`${commandPrefix}tolong\`.`
     );
   }
 };

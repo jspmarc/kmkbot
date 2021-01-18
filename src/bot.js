@@ -38,7 +38,6 @@ const channelIdPerkenalan = '751093758363304087'; // real channel
 const guildName = 'KMK ITB';
 const unassignedRoleName = 'KMK XX';
 const assignedRoleName = 'Member';
-const commandPrefix = '!';
 const config = {
     clientID: process.env.KMK_BOT_CLIENT_ID,
     clientSecret: process.env.KMK_BOT_SECRET,
@@ -53,7 +52,7 @@ const config = {
 client.on('message', (msg) => {
     // Kalo message dikirim di guildName dan channel channelIdPerkenalan
     if (msg.channel.id == channelIdPerkenalan && msg.guild.name == guildName) {
-        console.log(`Dapat message dari ${msg.author.username} (${msg.author.id}) di ${msg.channel.id}`);
+        console.log(`Dapat message perkenalan dari ${msg.author.username} (${msg.author.id}) di ${msg.channel.id}`);
         console.log('================================================');
         const content = msg.content;
         const sender = msg.author;
@@ -93,7 +92,7 @@ client.on('message', (msg) => {
                 angkatan = 'Alumni';
             }
             else {
-                sender.send("Format Anda salah. Harap memasukkan tahun angkatan atau 'alumni' (tanpa ') jika Anda merupakan alumni KMK angkatan 2015 atau sebelumnya.");
+                sender.send('Format Anda salah. Harap memasukkan tahun angkatan Anda.');
                 msg
                     .delete()
                     .then(() => {
@@ -110,7 +109,7 @@ client.on('message', (msg) => {
             }
         }
         else {
-            angkatan = angkatanAngka.toString();
+            angkatan = angkatanAngka >= 2016 ? angkatanAngka.toString() : 'Alumni';
         }
         // Kalo orang yg ngirim msg member dari server guildName
         if (member) {
@@ -128,14 +127,29 @@ client.on('message', (msg) => {
                     isRoleAssigned = true;
                     // Ilangin role dari member
                     member.roles.remove(gaPunyaRole);
-                }
-                // Ngeset nickname sesuai nama lengkap
-                if (isRoleAssigned) {
+                    // Ngeset nickname sesuai nama lengkap
                     member.setNickname(namaLengkap);
                     member.roles.add(msgGuild.roles.cache.find((e) => {
                         return e.name == assignedRoleName;
                     }));
                 }
+                else {
+                    sender.send('Format Anda salah. Harap memasukkan tahun angkatan Anda.');
+                    msg
+                        .delete()
+                        .then(() => {
+                        console.log('Pesan sudah dihapus.');
+                        console.log('================================================');
+                    })
+                        .catch((e) => {
+                        console.log('Gagal menghapus pesan yang dikirim.');
+                        console.log('Error:');
+                        console.log(e);
+                        console.log('================================================');
+                    });
+                    return;
+                }
+                console.log(`Dah ngasih role ${assignedRoleAngkatan} dan ${assignedRoleName} ke ${msg.author.username} (${msg.author.id}).`);
             }
             else {
                 console.log(`${msg.author.username} (${msg.author.id}) sudah punya role.`);
@@ -168,6 +182,7 @@ client.on('guildMemberAdd', (member) => {
               > - Angkatan: 2020\n\
               > - Divisi: BRT\n\n\
   Ditunggu ngeramein dan asik-asikan di Discord KMK ITB!');
+    console.log(`New member, ${member.user.username} (${member.id})`);
 });
 // *** END ***
 client.on('message', (msg) => {
@@ -179,8 +194,8 @@ client.on('message', (msg) => {
 client.on('message', (msg) => {
     if (msg.guild != null &&
         msg.author.id != config.clientID &&
-        msg.content.startsWith(commandPrefix, 0)) {
-        console.log(`Dapat message dari ${msg.author.username} (${msg.author.id}) di ${msg.guild.name} channel ${msg.channel.id}.`);
+        msg.content.startsWith(command.commandPrefix, 0)) {
+        console.log(`Dapat message perintah dari ${msg.author.username} (${msg.author.id}) di ${msg.guild.name} channel ${msg.channel.id}.`);
         const usrMsg = msg.content.slice(1).split(' ');
         const usrCmd = usrMsg[0];
         const usrCmdArgs = usrMsg.slice(1);

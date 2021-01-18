@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.processCommand = void 0;
+exports.processCommand = exports.commandPrefix = void 0;
 const fs = require("fs");
 const events_1 = require("./events");
+exports.commandPrefix = '~';
 const commands = [
     {
         commandName: 'help',
@@ -79,7 +80,7 @@ const processCommand = (msg, usrCmd, usrCmdArgs) => {
         msg.channel.send(sendStr);
     }
     else {
-        msg.channel.send('Perintah tidak dikenali. Gunakan `!help` atau `!tolong`.');
+        msg.channel.send(`Perintah tidak dikenali. Gunakan \`${exports.commandPrefix}help\` atau \`${exports.commandPrefix}tolong\`.`);
     }
 };
 exports.processCommand = processCommand;
