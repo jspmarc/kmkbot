@@ -20,6 +20,11 @@ interface commandList {
   commandOpts?: commandOptions[];
 }
 
+interface medsos {
+  medsosName: string;
+  medsosLink: string;
+}
+
 const commands: commandList[] = [
   {
     commandName: 'help',
@@ -42,7 +47,7 @@ const commands: commandList[] = [
   {
     commandName: 'kenalan',
     commandDesc:
-      'Menuliskan media-media sosial KMK ITB yang bisa di-follow untuk\
+      'Menuliskan media-media sosial KMK ITB yang bisa di-follow untuk\n\
       mendapatkan info tentang KMK ITB :D',
   },
 ];
@@ -91,9 +96,29 @@ export const processCommand = (
 
     msg.channel.send(sendMsg);
   } else if (usrCmd == 'kenalan') {
-    const medsos: { medsosName: string; medsosLink: string } = {
-      medsosName: 'Instagram',
-      medsosLink: 'https://www.instagram.com/kmk.itb/',
-    };
+    const medsosList: medsos[] = [
+      {
+        medsosName: 'Instagram',
+        medsosLink: 'https://www.instagram.com/kmk.itb/',
+      },
+      {
+        medsosName: 'Line',
+        medsosLink: '',
+      },
+    ];
+
+    let sendStr: string = 'Yuk, kenalan sama KMK ITB!';
+
+    for (let i = 0; i < medsosList.length; ++i) {
+      sendStr += `\n${i + 1}. ${medsosList[i].medsosName}: ${
+        medsosList[i].medsosLink
+      }`;
+    }
+
+    msg.channel.send(sendStr);
+  } else {
+    msg.channel.send(
+      'Perintah tidak dikenali. Gunakan `!help` atau `!tolong`.'
+    );
   }
 };
