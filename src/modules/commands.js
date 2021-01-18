@@ -72,7 +72,7 @@ const processCommand = (msg, usrCmd, usrCmdArgs) => {
                 medsosLink: '',
             },
         ];
-        let sendStr = '';
+        let sendStr = 'Yuk, kenalan sama KMK ITB!';
         for (let i = 0; i < medsosList.length; ++i) {
             sendStr += `\n${i + 1}. ${medsosList[i].medsosName}: ${medsosList[i].medsosLink}`;
         }
