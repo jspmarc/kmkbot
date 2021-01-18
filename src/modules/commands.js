@@ -74,7 +74,7 @@ const processCommand = (msg, usrCmd, usrCmdArgs) => {
         ];
         let sendStr = '';
         for (let i = 0; i < medsosList.length; ++i) {
-            sendStr += `${i + 1}. ${medsosList[i].medsosName}: ${medsosList[i].medsosLink}`;
+            sendStr += `\n${i + 1}. ${medsosList[i].medsosName}: ${medsosList[i].medsosLink}`;
         }
         msg.channel.send(sendStr);
     }

@@ -110,7 +110,7 @@ export const processCommand = (
     let sendStr: string = '';
 
     for (let i = 0; i < medsosList.length; ++i) {
-      sendStr += `${i + 1}. ${medsosList[i].medsosName}: ${
+      sendStr += `\n${i + 1}. ${medsosList[i].medsosName}: ${
         medsosList[i].medsosLink
       }`;
     }
