@@ -16,7 +16,7 @@ const cari = (str: string[], dicari: string): string => {
   return tempStr;
 };
 
-const splitName = (name: string) => {
+const splitName = (name: string): string => {
   const maxLength: number = 32;
   let thatNameArr: string[] = name.split(' ');
   let currentLength: number = name.length;
@@ -84,8 +84,18 @@ client.on('message', (msg: Discord.Message) => {
       );
       console.log('Error yang didapat: ');
       console.log(e);
-      msg.delete();
-      console.log('Pesan sudah dihapus.');
+      msg
+        .delete()
+        .then(() => {
+          console.log('Pesan sudah dihapus.');
+          console.log('================================================');
+        })
+        .catch((e) => {
+          console.log('Gagal menghapus pesan yang dikirim.');
+          console.log('Error:');
+          console.log(e);
+          console.log('================================================');
+        });
       return;
     }
 
@@ -99,8 +109,18 @@ client.on('message', (msg: Discord.Message) => {
         sender.send(
           "Format Anda salah. Harap memasukkan tahun angkatan atau 'alumni' (tanpa ') jika Anda merupakan alumni KMK angkatan 2015 atau sebelumnya."
         );
-        msg.delete();
-        console.log('Pesan sudah dihapus.');
+        msg
+          .delete()
+          .then(() => {
+            console.log('Pesan sudah dihapus.');
+            console.log('================================================');
+          })
+          .catch((e) => {
+            console.log('Gagal menghapus pesan yang dikirim.');
+            console.log('Error:');
+            console.log(e);
+            console.log('================================================');
+          });
         return;
       }
     } else {

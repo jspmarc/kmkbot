@@ -6,8 +6,46 @@ import { Event } from './events';
 interface rawEvent {
   title: string;
   date: number;
-  desc: string;
+  desc?: string;
 }
+
+interface commandOptions {
+  optName: string;
+  optDesc: string;
+}
+
+interface commandList {
+  commandName: string;
+  commandDesc: string;
+  commandOpts?: commandOptions[];
+}
+
+const commands: commandList[] = [
+  {
+    commandName: 'help',
+    commandDesc: 'Menuliskan perintah-perintah untuk bot KMK ITB.',
+  },
+  {
+    commandName: 'tolong',
+    commandDesc: 'Menuliskan perintah-perintah untuk bot KMK ITB.',
+  },
+  {
+    commandName: 'events',
+    commandDesc:
+      'Menuliskan acara-acara mendatang yang akan dilaksanakan oleh KMK ITB.',
+  },
+  {
+    commandName: 'acara',
+    commandDesc:
+      'Menuliskan acara-acara mendatang yang akan dilaksanakan oleh KMK ITB.',
+  },
+  {
+    commandName: 'kenalan',
+    commandDesc:
+      'Menuliskan media-media sosial KMK ITB yang bisa di-follow untuk\
+      mendapatkan info tentang KMK ITB :D',
+  },
+];
 
 export const processCommand = (
   msg: Discord.Message,
@@ -15,22 +53,32 @@ export const processCommand = (
   usrCmdArgs?: string[]
 ) => {
   if (usrCmd == 'help' || usrCmd == 'tolong') {
-    const help: string =
-      'List perintah untuk bot KMK ITB:\n\
-    \t- `help`: Menuliskan perintah-perintah untuk bot KMK ITB,\n\
-    \t- `tolong`: Menuliskan perintah-perintah untuk bot KMK ITB,\n\
-    \t- `events`: Menuliskan acara-acara mendatang yang akan dilaksanakan oleh KMK ITB,\n\
-    \t- `acara`: Menuliskan acara-acara mendatang yang akan dilaksanakan oleh KMK ITB.';
+    let help: string = 'List perintah untuk bot KMK ITB:\n';
+    let i = 0;
+    for (const command of commands) {
+      if (i++ == 0) {
+        help += `\t- \`${command.commandName}\`: ${command.commandDesc}`;
+      } else {
+        help += `\n\t- \`${command.commandName}\`: ${command.commandDesc}`;
+      }
+
+      if (command.commandOpts != null) {
+        help += `\n\toptions:`;
+        for (const opt of command.commandOpts) {
+          help += `\n\t\t‣ \`${opt.optName}\`: ${opt.optName}`;
+        }
+      }
+    }
     msg.author.send(help);
     msg.channel.send(
       `List perintah sudah dikirimkan ke DM Discord ${msg.author.username}.`
     );
   } else if (usrCmd == 'events' || usrCmd == 'acara') {
-    let rawData: Buffer = fs.readFileSync('./events.json');
+    let rawData: Buffer = fs.readFileSync('data/events.json');
     let datas: rawEvent[] = JSON.parse(rawData.toString());
     let events: Event[] = [];
 
-    let sendMsg: string = 'Acara KMK Mendatang:\n';
+    let sendMsg: string = 'Acara KMK Mendatang:';
 
     for (let data of datas) {
       let event: Event = new Event(data.title, data.date, data.desc);
@@ -38,9 +86,14 @@ export const processCommand = (
     }
 
     for (let i = 0; i < events.length; ++i) {
-      sendMsg += `${i + 1}. ${events[i].getPrint()}\n`;
+      sendMsg += `\n${i + 1}. ${events[i].getPrintString()}`;
     }
 
     msg.channel.send(sendMsg);
+  } else if (usrCmd == 'kenalan') {
+    const medsos: { medsosName: string; medsosLink: string } = {
+      medsosName: 'Instagram',
+      medsosLink: 'https://www.instagram.com/kmk.itb/',
+    };
   }
 };
