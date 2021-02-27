@@ -145,8 +145,9 @@ export const processCommand = (
     case 'rules':
     case 'aturan':
       const channelIdPerkenalan: string = '751093758363304087';
+      const channelIdRules: string = '751093627177926688';
       const rules: string = [
-        `1.    Lakukan perkenalan di kanal <#${channelIdPerkenalan}> dengan format yang ditentukan di bawah daftar aturan server ini.`,
+        `1.    Lakukan perkenalan di kanal <#${channelIdPerkenalan}> dengan format yang ditentukan di channel <#${channelIdRules}>.`,
         `2.    Anggota yang belum memperkenalkan dirinya di saluran perkenalan tidak akan mendapatkan peran dan tidak dapat melihat saluran lainnya.`,
         `3.    Dilarang melakukan tindakan yang mengganggu kenyamanan orang lain.`,
         `4.    Dilarang berkata kasar, mengumpat, dan / atau menghina pengguna lain.`,

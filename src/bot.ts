@@ -204,6 +204,10 @@ client.on('message', (msg: Discord.Message) => {
  * *** START ***
  */
 client.on('guildMemberAdd', (member) => {
+  const currentGreetChannelId: string = '758317504295731231';
+  const channelIdHelp: string = '758317504295731231';
+  const channelIdRules: string = '751093627177926688';
+
   member.roles.add(
     member.guild.roles.cache.find((e) => {
       return e.name == 'KMK XX';
@@ -227,6 +231,21 @@ client.on('guildMemberAdd', (member) => {
               > - Divisi: BRT\n\n\
   Ditunggu ngeramein dan asik-asikan di Discord KMK ITB!'
   );
+
+  /*
+  const greeting: string = `Selamat datang, <@${member.id}> di channel KMK ITB!\n\
+  Jangan lupa buat perkenalan diri di: <#${channelIdPerkenalan}>.
+  Jika ada pertanyaan, silakan tanyakan di <#${channelIdHelp}>.
+  Terakhir, jangan lupa baca peraturan di <#${channelIdRules}>.
+  Ditunggu buat ngeramein server KMK! :D`;
+
+  const chan: Discord.GuildChannel = member.guild.channels.cache.get(
+    currentGreetChannelId
+  );
+  if (chan.isText()) {
+    chan.send(greeting);
+  }
+  */
 
   console.log(`New member, ${member.user.username} (${member.id})`);
 });
