@@ -232,7 +232,6 @@ client.on('guildMemberAdd', (member) => {
   Ditunggu ngeramein dan asik-asikan di Discord KMK ITB!'
   );
 
-  /*
   const greeting: string = `Selamat datang, <@${member.id}> di channel KMK ITB!\n\
   Jangan lupa buat perkenalan diri di: <#${channelIdPerkenalan}>.
   Jika ada pertanyaan, silakan tanyakan di <#${channelIdHelp}>.
@@ -245,7 +244,6 @@ client.on('guildMemberAdd', (member) => {
   if (chan.isText()) {
     chan.send(greeting);
   }
-  */
 
   console.log(`New member, ${member.user.username} (${member.id})`);
 });
