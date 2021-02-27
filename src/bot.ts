@@ -76,7 +76,22 @@ client.on('message', (msg: Discord.Message) => {
       namaLengkap = splitName(cari(parsedContent, 'nama lengkap'));
       angkatan = cari(parsedContent, 'angkatan');
     } catch (e) {
-      sender.send('Format perkenalan Anda salah, tolong diperbaiki');
+      sender.send('Format perkenalan Anda salah, tolong diperbaiki.');
+      member.send(
+        'Format yang benar: \n\
+              > - Nama lengkap:\n\
+              > - Nama panggilan:\n\
+              > - Fakultas/Jurusan:\n\
+              > - Angkatan:\n\
+              > - Divisi:\n\
+              > * Bagian divisi hanya diisi jika menjadi staff/BP, selain itu isi dengan "Anggota"\n\n\
+  Contoh:\n\
+              > - Nama lengkap: Bot KMK\n\
+              > - Nama panggilan: Bot\n\
+              > - Fakultas/Jurusan: STEI/Teknik Informatika\n\
+              > - Angkatan: 2020\n\
+              > - Divisi: BRT\n\n'
+      );
       console.log(`Message yang diberikan: ${msg.content}`);
       console.log(
         `Pengirim message: ${msg.author.username} (${msg.author.id})`
@@ -121,27 +136,28 @@ client.on('message', (msg: Discord.Message) => {
         return;
       }
     } else {
-      angkatan = angkatanAngka >= 2016 ? angkatanAngka.toString() : 'Alumni';
+      angkatan = angkatanAngka >= 16 ? angkatanAngka.toString() : 'Alumni';
     }
 
     // Kalo orang yg ngirim msg member dari server guildName
     if (member) {
-      let isRoleAssigned: boolean = false;
-      const gaPunyaRole: Discord.Role = member.roles.cache.find((e) => {
+      //let isRoleAssigned: boolean = false;
+      const roleDefault: Discord.Role = member.roles.cache.find((e) => {
         return e.name == unassignedRoleName;
       });
 
-      if (gaPunyaRole) {
-        const assignedRoleAngkatan = msgGuild.roles.cache.find((e) => {
-          return e.name.includes(angkatan);
-        });
+      if (roleDefault) {
+        const assignedRoleAngkatan: Discord.Role = msgGuild.roles.cache.find(
+          (e) => {
+            return e.name.includes(angkatan);
+          }
+        );
 
         if (assignedRoleAngkatan /* Kalo role-nya ada */) {
           // Assign role angkatan
           member.roles.add(assignedRoleAngkatan);
-          isRoleAssigned = true;
-          // Ilangin role dari member
-          member.roles.remove(gaPunyaRole);
+          // Ilangin role KMK XX dari member
+          member.roles.remove(roleDefault);
 
           // Ngeset nickname sesuai nama lengkap
           member.setNickname(namaLengkap);
@@ -169,7 +185,7 @@ client.on('message', (msg: Discord.Message) => {
           return;
         }
         console.log(
-          `Dah ngasih role ${assignedRoleAngkatan} dan ${assignedRoleName} ke ${msg.author.username} (${msg.author.id}).`
+          `Dah ngasih role ${assignedRoleAngkatan.name} dan ${assignedRoleName} ke ${msg.author.username} (${msg.author.id}).`
         );
       } else {
         console.log(
