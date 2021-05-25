@@ -14,7 +14,7 @@ export class Event {
   }
 
   getPrintString(): string {
-    let retStr: string = `${this._title} ---- ${this._dateStr}`;
+    let retStr = `${this._title} ---- ${this._dateStr}`;
 
     if (this._desc != null) {
       retStr += '\n\n';

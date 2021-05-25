@@ -2,7 +2,7 @@ import * as Discord from 'discord.js';
 import * as fs from 'fs';
 import { Event } from './events';
 
-export const commandPrefix: string = '~';
+export const commandPrefix = '~';
 
 /* an object with similar key and values as the events.json file */
 interface rawEvent {
@@ -11,16 +11,16 @@ interface rawEvent {
   desc?: string;
 }
 
-interface commandOptions {
-  optName: string;
-  optDesc: string;
-}
+// interface commandOptions {
+//   optName: string;
+//   optDesc: string;
+// }
 
 interface commandList {
   commandName: string;
   commandDesc: string;
   commandAlias?: string[];
-  commandOpts?: commandOptions[];
+  // commandOpts?: commandOptions[];
 }
 
 interface medsos {
@@ -57,14 +57,14 @@ const commands: commandList[] = [
 export const processCommand = (
   msg: Discord.Message,
   usrCmd: string,
-  usrCmdArgs?: string[]
-) => {
+  // usrCmdArgs?: string[]
+): void => {
   switch (usrCmd) {
     // *** Help command
     case 'help':
     case 'tolong':
     case 'man':
-      let help: string = 'List perintah untuk bot KMK ITB:\n';
+      let help = 'List perintah untuk bot KMK ITB:\n';
       let i = 0;
       for (const command of commands) {
         if (i++ == 0) {
@@ -75,19 +75,19 @@ export const processCommand = (
 
         if (command.commandAlias != null) {
           help += '\n\t\t Alias/nama lain perintah: ';
-          let aliases: string[] = [];
+          const aliases: string[] = [];
           command.commandAlias.forEach((str: string) => {
             aliases.push(`\`${str}\``);
           });
           help += aliases.join(', ');
         }
 
-        if (command.commandOpts != null) {
-          help += `\n\toptions:`;
-          for (const opt of command.commandOpts) {
-            help += `\n\t\t‣ \`${opt.optName}\`: ${opt.optName}`;
-          }
-        }
+        // if (command.commandOpts != null) {
+        //   help += `\n\toptions:`;
+        //   for (const opt of command.commandOpts) {
+        //     help += `\n\t\t‣ \`${opt.optName}\`: ${opt.optName}`;
+        //   }
+        // }
       }
 
       msg.author.send(help);
@@ -101,11 +101,11 @@ export const processCommand = (
     case 'acara':
       const rawData: Buffer = fs.readFileSync('data/events.json');
       const datas: rawEvent[] = JSON.parse(rawData.toString());
-      let events: Event[] = [];
+      const events: Event[] = [];
 
-      let sendMsg: string = 'Acara KMK Mendatang:';
+      let sendMsg = 'Acara KMK Mendatang:';
 
-      for (let data of datas) {
+      for (const data of datas) {
         const event: Event = new Event(data.title, data.date, data.desc);
         events.push(event);
       }
@@ -130,7 +130,7 @@ export const processCommand = (
         },
       ];
 
-      let sendStr: string = 'Yuk, kenalan sama KMK ITB!';
+      let sendStr = 'Yuk, kenalan sama KMK ITB!';
 
       for (let i = 0; i < medsosList.length; ++i) {
         sendStr += `\n${i + 1}. ${medsosList[i].medsosName}: ${
@@ -144,15 +144,15 @@ export const processCommand = (
     // *** Rules
     case 'rules':
     case 'aturan':
-      const channelIdPerkenalan: string = '751093758363304087';
-      const channelIdRules: string = '751093627177926688';
+      const channelIdPerkenalan = '751093758363304087';
+      const channelIdRules = '751093627177926688';
       const rules: string = [
         `1.    Lakukan perkenalan di kanal <#${channelIdPerkenalan}> dengan format yang ditentukan di channel <#${channelIdRules}>.`,
-        `2.    Anggota yang belum memperkenalkan dirinya di saluran perkenalan tidak akan mendapatkan peran dan tidak dapat melihat saluran lainnya.`,
-        `3.    Dilarang melakukan tindakan yang mengganggu kenyamanan orang lain.`,
-        `4.    Dilarang berkata kasar, mengumpat, dan / atau menghina pengguna lain.`,
-        `5.    Dilarang menyebarkan iklan, poster, form, dan ajakan lainnya yang tidak berhubungan dengan KMK ITB.`,
-        `6.    Untuk penggunaan kanal suara, harap mengeluarkan suara dengan volume yang wajar. Jika situasi kurang kondusif, harap mematikan mic dan menyalakannya saat ingin berbicara saja.`,
+        '2.    Anggota yang belum memperkenalkan dirinya di saluran perkenalan tidak akan mendapatkan peran dan tidak dapat melihat saluran lainnya.',
+        '3.    Dilarang melakukan tindakan yang mengganggu kenyamanan orang lain.',
+        '4.    Dilarang berkata kasar, mengumpat, dan / atau menghina pengguna lain.',
+        '5.    Dilarang menyebarkan iklan, poster, form, dan ajakan lainnya yang tidak berhubungan dengan KMK ITB.',
+        '6.    Untuk penggunaan kanal suara, harap mengeluarkan suara dengan volume yang wajar. Jika situasi kurang kondusif, harap mematikan mic dan menyalakannya saat ingin berbicara saja.',
       ].join('\n');
 
       msg.channel.send(rules);

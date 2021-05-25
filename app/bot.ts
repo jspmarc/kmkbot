@@ -2,6 +2,9 @@
 
 import * as Discord from 'discord.js';
 import * as command from './modules/commands';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 /* *** Function declarations *** */
 /* START */
@@ -17,16 +20,16 @@ const cari = (str: string[], dicari: string): string => {
 };
 
 const splitName = (name: string): string => {
-  const maxLength: number = 32;
-  let thatNameArr: string[] = name.split(' ');
-  let currentLength: number = name.length;
-  let i: number = thatNameArr.length - 1;
+  const maxLength = 32;
+  const thatNameArr = name.split(' ');
+  let currentLength = name.length;
+  let i = thatNameArr.length - 1;
   while (currentLength > maxLength && i > 0) {
     currentLength -= thatNameArr[i].length - 2;
     thatNameArr[i] = thatNameArr[i].slice(0, 1).toUpperCase() + '.';
     i--;
   }
-  let thatName: string = thatNameArr.join(' ');
+  let thatName = thatNameArr.join(' ');
   if (currentLength > maxLength) {
     thatName = thatName.slice(0, maxLength - 3) + '...';
   }
@@ -37,12 +40,12 @@ const splitName = (name: string): string => {
 
 /* *** Config declarations *** */
 /* START */
-const client: Discord.Client = new Discord.Client();
-const channelIdPerkenalan: string = '751093758363304087'; // real channel
+const client = new Discord.Client();
+const channelIdPerkenalan = '751093758363304087'; // real channel
 //const channelIdPerkenalan: string = '789181644166135808'; // testing channel
-const guildName: string = 'KMK ITB';
-const unassignedRoleName: string = 'KMK XX';
-const assignedRoleName: string = 'Member';
+const guildName = 'KMK ITB';
+const unassignedRoleName = 'KMK XX';
+const assignedRoleName = 'Member';
 
 const config = {
   clientID: process.env.KMK_BOT_CLIENT_ID,
@@ -204,9 +207,9 @@ client.on('message', (msg: Discord.Message) => {
  * *** START ***
  */
 client.on('guildMemberAdd', (member) => {
-  const currentGreetChannelId: string = '758317504295731231';
-  const channelIdHelp: string = '758317504295731231';
-  const channelIdRules: string = '751093627177926688';
+  const currentGreetChannelId = '758317504295731231';
+  const channelIdHelp = '758317504295731231';
+  const channelIdRules = '751093627177926688';
 
   member.roles.add(
     member.guild.roles.cache.find((e) => {
@@ -232,7 +235,7 @@ client.on('guildMemberAdd', (member) => {
   Ditunggu ngeramein dan asik-asikan di Discord KMK ITB!'
   );
 
-  const greeting: string = `Selamat datang, <@${member.id}> di channel KMK ITB!\n\
+  const greeting = `Selamat datang, <@${member.id}> di channel KMK ITB!\n\
   Jangan lupa buat perkenalan diri di: <#${channelIdPerkenalan}>.
   Jika ada pertanyaan, silakan tanyakan di <#${channelIdHelp}>.
   Terakhir, jangan lupa baca peraturan di <#${channelIdRules}>.
