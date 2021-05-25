@@ -1,4 +1,4 @@
-FROM node:lts-alpine3.13
+FROM node:16-alpine3.13
 
 ARG KMK_BOT_CLIENT_ID
 ARG KMK_BOT_SECRET
