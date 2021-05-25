@@ -5,5 +5,5 @@
         "module": "CommonJS",
         "outDir": "./build"
     },
-    "files": ["./src/bot.ts", "./src/modules/events.ts", "./src/modules/commands.ts"]
+    "files": ["./app/bot.ts", "./app/modules/events.ts", "./app/modules/commands.ts"]
 }

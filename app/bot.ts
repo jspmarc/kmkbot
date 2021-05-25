@@ -274,9 +274,9 @@ client.on('message', (msg: Discord.Message) => {
     );
     const usrMsg: string[] = msg.content.slice(1).split(' ');
     const usrCmd: string = usrMsg[0];
-    const usrCmdArgs: string[] = usrMsg.slice(1);
+    // const usrCmdArgs: string[] = usrMsg.slice(1);
 
-    command.processCommand(msg, usrCmd, usrCmdArgs);
+    command.processCommand(msg, usrCmd/*, usrCmdArgs*/);
   }
 });
 

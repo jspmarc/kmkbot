@@ -19,7 +19,9 @@
   "scripts": {
     "start": "node build/bot.js",
     "tsc": "tsc",
-    "postinstall": "npm run tsc"
+    "precommit": "npx eslint",
+    "postinstall": "npm run tsc",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
