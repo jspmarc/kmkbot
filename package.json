@@ -13,15 +13,11 @@
     "@typescript-eslint/eslint-plugin": "^4.25.0",
     "@typescript-eslint/parser": "^4.25.0",
     "eslint": "^7.27.0",
-    "husky": "^6.0.0",
     "typescript": "^4.2.4"
   },
   "scripts": {
     "start": "node build/bot.js",
-    "tsc": "tsc",
-    "precommit": "npx eslint",
-    "postinstall": "npm run tsc",
-    "prepare": "husky install"
+    "tsc": "tsc"
   },
   "repository": {
     "type": "git",
