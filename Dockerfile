@@ -1,9 +1,19 @@
 FROM node:lts-alpine3.13
 
+ARG KMK_BOT_CLIENT_ID
+ARG KMK_BOT_SECRET
+ARG KMK_BOT_TOKEN
+ARG KMK_GUILD_ID
+
+ENV KMK_BOT_CLIENT_ID=${KMK_BOT_CLIENT_ID}
+ENV KMK_BOT_SECRET=${KMK_BOT_SECRET}
+ENV KMK_BOT_TOKEN=${KMK_BOT_TOKEN}
+ENV KMK_GUILD_ID=${KMK_GUILD_ID}
+
 # RUN apk update && apk upgrade
 COPY . /bot
 WORKDIR /bot
 RUN npm i
 RUN npx tsc
 
-# CMD ["npm", "run", "start"]
+CMD ["npm", "run", "start"]

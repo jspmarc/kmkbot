@@ -284,4 +284,5 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
-client.login(config.clientToken);
+client.login(config.clientToken)
+  .catch(e => console.error(e));

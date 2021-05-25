@@ -2,8 +2,13 @@ version: '3.9'
 
 services:
     bot:
-        build: .
-        restart: unless-stopped
+        build:
+            context: .
+            args:
+                - KMK_BOT_CLIENT_ID=${KMK_BOT_CLIENT_ID}
+                - KMK_BOT_SECRET=${KMK_BOT_SECRET}
+                - KMK_BOT_TOKEN=${KMK_BOT_TOKEN}
+                - KMK_GUILD_ID=${KMK_GUILD_ID}
     db:
         image: postgres:13.3-alpine
         environment:

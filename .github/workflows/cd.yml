@@ -1,32 +1,31 @@
 name: CD
-on: push
+on:
+  push:
+    branches: [ master ]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Publish Bot to Registry
-        uses: elgohr/Publish-Docker-Github-Action@master
-        with:
-          name: jspmarc/kmkitb/prod
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
-          registry: docker.pkg.github.com
-          tags: "prod"
-  # copy-env:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - name: Copy .env
-  #     uses: appleboy/scp-action@master
-  #     with:
-  #       host: ${{ secrets.SSH_HOST }}
-  #       username: ${{ secrets.SSH_USERNAME }}
-  #       password: ${{ secrets.SSH_PASSWORD }}
-  #       port: ${{ secrets.SSH_PORT }}
-  #       source: ".env"
-  #       target: "."
-  #       overwrite: true
+    - uses: actions/checkout@v2
+    # - name: Copy .env
+    #   uses: appleboy/scp-action@master
+    #   with:
+    #     host: ${{ secrets.SSH_HOST }}
+    #     username: ${{ secrets.SSH_USERNAME }}
+    #     password: ${{ secrets.SSH_PASSWORD }}
+    #     port: ${{ secrets.SSH_PORT }}
+    #     source: ".env"
+    #     target: "."
+    #     overwrite: true
+    - name: Publish bot to Registry
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: jspmarc/kmkitb/prod
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+        registry: docker.pkg.github.com
+        buildargs: KMK_BOT_CLIENT_ID=${{ secrets.BOT_CLIENT_ID }},KMK_BOT_SECRET=${{ secrets.BOT_SECRET }},KMK_BOT_TOKEN=${{ secrets.BOT_TOKEN }},KMK_GUILD_ID=${{ secrets.GUILD_ID }}
+        tags: "prod"
   deploy:
     runs-on: ubuntu-latest
     needs: [build]
