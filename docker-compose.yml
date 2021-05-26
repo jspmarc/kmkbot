@@ -1,14 +1,6 @@
 version: '3.9'
 
 services:
-    bot:
-        build:
-            context: .
-            args:
-                - KMK_BOT_CLIENT_ID=${KMK_BOT_CLIENT_ID}
-                - KMK_BOT_SECRET=${KMK_BOT_SECRET}
-                - KMK_BOT_TOKEN=${KMK_BOT_TOKEN}
-                - KMK_GUILD_ID=${KMK_GUILD_ID}
     db:
         image: postgres:13.3-alpine
         environment:
@@ -18,6 +10,10 @@ services:
         ports:
             - 5432:5432
         restart: always
+    bot:
+        image: docker.pkg.github.com/jspmarc/kmkbot/prod:latest
+        depends_on:
+            - db
 
 
 # version: "3"
