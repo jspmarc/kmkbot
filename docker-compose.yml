@@ -3,17 +3,29 @@ version: '3.9'
 services:
     db:
         image: postgres:13.3-alpine
-        environment:
-            POSTGRES_PASSWORD: "isroot"
-            POSTGRES_USER: "root"
-            POSTGRES_DB: "bot"
+        env_file: .env_db
         ports:
             - 5432:5432
+        volumes:
+            - db-data:/var/lib/postgresql/data
         restart: always
-    bot:
-        image: docker.pkg.github.com/jspmarc/kmkbot/prod:latest
+    pgadmin:
+        image: dpage/pgadmin4:latest
+        env_file: .env_pgadmin
+        ports:
+            - 8080:80
+        volumes:
+            - pgadmin-data:/var/lib/pgadmin
         depends_on:
             - db
+    bot:
+        image: docker.pkg.github.com/jspmarc/kmkbot/prod:latest
+        env_file: .env
+        depends_on:
+            - db
+volumes:
+    db-data:
+    pgadmin-data:
 
 
 # version: "3"

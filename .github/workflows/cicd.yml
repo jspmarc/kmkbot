@@ -23,7 +23,6 @@ jobs:
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
         registry: docker.pkg.github.com
-        buildargs: KMK_BOT_CLIENT_ID=${{ secrets.BOT_CLIENT_ID }},KMK_BOT_SECRET=${{ secrets.BOT_SECRET }},KMK_BOT_TOKEN=${{ secrets.BOT_TOKEN }},KMK_GUILD_ID=${{ secrets.GUILD_ID }}
         tags: "latest"
   deploy:
     runs-on: ubuntu-latest
